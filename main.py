@@ -30,7 +30,7 @@ def parse_arguments(sys_argv):
     print('Parsing arguments...')
     parser.add_argument('--model',
                         help='Select the model to use',
-                        choices=['all', 'LogLoss', 'SVM', 'RF', 'DNN'],
+                        choices=['all', 'LogLoss', 'DecTree', 'SVM', 'RF', 'DNN'],
                         default='all',
                         type=str)
     parser.add_argument('--best_parameters',
