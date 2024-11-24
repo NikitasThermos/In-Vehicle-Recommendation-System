@@ -23,18 +23,6 @@ def log_results(y_test, **predictions):
      print(tabulate(results, headers, tablefmt="grid"))
 
 
-  conf_matrix = confusion_matrix(y_true, y_pred)
-  precision = precision_score(y_true, y_pred)
-  recall = recall_score(y_true, y_pred)
-  f1 = f1_score(y_true, y_pred)
-  roc_auc = roc_auc_score(y_true, y_pred)
-  print(f'confusion matrix for {model}:\n {conf_matrix}')
-  print(f'Precision Score: {precision:.2f}')
-  print(f'Recall Score: {recall:.2f}')
-  print(f'F1 Score: {f1:.2f}')
-  print(f'ROC_AUC Score: {roc_auc:.2f}')
-  results.append([model, precision, recall, f1, roc_auc])
-
 def parse_arguments(sys_argv): 
     parser = argparse.ArgumentParser() 
 
