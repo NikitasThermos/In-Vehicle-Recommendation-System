@@ -24,7 +24,7 @@ def logLoss(X_train, y_train, X_test, preprocessor):
         'sgdclassifier__alpha': uniform(loc=0.0001, scale=3),
         'sgdclassifier__eta0': uniform(loc=0.0001, scale=10),
     }
-
+    print('Starting parameter search for LogLoss')
     random_search = RandomizedSearchCV(
         full_pipeline,
         param_distributions=param_grid,
