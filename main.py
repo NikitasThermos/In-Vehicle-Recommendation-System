@@ -70,8 +70,8 @@ def main():
         case 'all':
             predictions['LogLoss'] = logLoss(X_train, y_train, X_test, preprocessor)
             predictions['SVM'] = svm(X_train, y_train, X_test, preprocessor)
-            predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor)
             predictions['DecTree'] = decisionTree(X_train, y_train, X_test, preprocessor)
+            predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor)
             predictions['DNN'] = dense_network(X_train, y_train, X_test, preprocessor)
         case _: 
           raise Exception(f'model:{args.model} not found')

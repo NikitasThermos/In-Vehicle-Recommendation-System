@@ -105,7 +105,7 @@ def svm(X_train, y_train, X_test, preprocessor):
         random_state=42,
     )
     random_search.fit(X_train, y_train)
-    random_search.predict(X_test) 
+    return random_search.predict(X_test) 
 
 def dense_network(X_train, y_train, X_test, preprocessor):
     X_train_nn, X_val_nn, y_train_nn, y_val_nn = train_test_split(X_train, y_train, test_size=0.1, random_state=42)
