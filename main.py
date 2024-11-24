@@ -1,15 +1,28 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 import sys
-
 import argparse
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, roc_auc_score
 import pandas as pd
+from tabulate import tabulate
 
 from models import logLoss, svm, decisionTree, randomForest, dense_network
 
-def log_results(model, y_true, y_pred):
+def log_results(y_test, **predictions):
+  print('Logging Results for the test set')
   results = []
+
+  for model, pred in predictions.items():
+     results.append([model, recall_score(y_test, pred),
+                     precision_score(y_test, pred), 
+                     f1_score(y_test, pred),
+                     roc_auc_score(y_test, pred)])
+     headers=["Model", "Recall", "Precision", "F1", "ROC AUC"]
+     print(tabulate(results, headers, tablefmt="grid"))
+
+
   conf_matrix = confusion_matrix(y_true, y_pred)
   precision = precision_score(y_true, y_pred)
   recall = recall_score(y_true, y_pred)
@@ -68,3 +81,9 @@ def main():
             predictions['DNN'] = dense_network(X_train, y_train, X_test)
         case _: 
           raise Exception(f'model:{args.model} not found')
+    
+    log_results(y_test, **predictions)
+
+
+if __name__ == 'main':
+  main()
