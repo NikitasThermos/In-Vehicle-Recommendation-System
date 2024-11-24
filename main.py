@@ -22,7 +22,7 @@ def log_results(y_test, **predictions):
                      f1_score(y_test, pred),
                      roc_auc_score(y_test, pred)])
      headers=["Model", "Recall", "Precision", "F1", "ROC AUC"]
-     print(tabulate(results, headers, tablefmt="grid"))
+  print(tabulate(results, headers, tablefmt="grid"))
 
 
 def parse_arguments(sys_argv): 
