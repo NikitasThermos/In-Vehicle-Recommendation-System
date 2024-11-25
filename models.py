@@ -146,7 +146,7 @@ def dense_network(X_train, y_train, X_test, preprocessor, args):
     X_test_nn = scaler.transform(X_test_nn)
 
     if args.best_parameters: 
-        model = tf.keras.models.load_model('parameters/dnn.h5')
+        model = tf.keras.models.load_model('parameters/dnn.keras')
         return [1 if p > 0.5 else 0 for p in model.predict(X_test)]
 
 
@@ -196,7 +196,7 @@ def dense_network(X_train, y_train, X_test, preprocessor, args):
         
     best_model = random_search_tuner.get_best_models()[0]
     if args.save_model:
-        best_model.save('parameters/dnn.h5')
+        best_model.save('parameters/dnn.keras')
 
     y_pred = [1 if p > 0.5 else 0 for p in best_model.predict(X_test_nn)]
     return y_pred
