@@ -1,3 +1,4 @@
+import joblib
 
 import sklearn
 from sklearn.linear_model import SGDClassifier
@@ -15,7 +16,7 @@ from scipy.stats import uniform, randint
 from imblearn.pipeline import make_pipeline
 
 
-def logLoss(X_train, y_train, X_test, preprocessor):
+def logLoss(X_train, y_train, X_test, preprocessor, args):
     full_pipeline = make_pipeline(preprocessor,
                               SGDClassifier(loss='log_loss',
                                             learning_rate='adaptive', random_state=42))
@@ -36,9 +37,11 @@ def logLoss(X_train, y_train, X_test, preprocessor):
         random_state=42
     )
     random_search.fit(X_train, y_train)
+    if args.save_model:
+        joblib.dump(random_search, 'parameters/logloss.pki')
     return random_search.predict(X_test)
 
-def decisionTree(X_train, y_train, X_test, preprocessor):
+def decisionTree(X_train, y_train, X_test, preprocessor, args):
     full_pipeline = make_pipeline(preprocessor,
                               DecisionTreeClassifier(random_state=42))
 
@@ -60,9 +63,11 @@ def decisionTree(X_train, y_train, X_test, preprocessor):
     )
 
     random_search.fit(X_train, y_train)
+    if args.save_model:
+        joblib.dump(random_search, 'parameters/dectree.pki')
     return random_search.predict(X_test)
 
-def randomForest(X_train, y_train, X_test, preprocessor):
+def randomForest(X_train, y_train, X_test, preprocessor, args):
     full_pipeline = make_pipeline(preprocessor,
                               RandomForestClassifier(random_state=42))
 
@@ -84,9 +89,11 @@ def randomForest(X_train, y_train, X_test, preprocessor):
     )
 
     random_search.fit(X_train, y_train)
+    if args.save_model:
+        joblib.dump(random_search, 'parameters/rf.pki')
     return random_search.predict(X_test)
 
-def svm(X_train, y_train, X_test, preprocessor):
+def svm(X_train, y_train, X_test, preprocessor, args):
     full_pipeline = make_pipeline(preprocessor,
                               SVC(kernel='rbf', gamma='scale', degree=2, random_state=42))
 
@@ -105,9 +112,11 @@ def svm(X_train, y_train, X_test, preprocessor):
         random_state=42,
     )
     random_search.fit(X_train, y_train)
+    if args.save_model:
+        joblib.dump(random_search, 'parameters/svm.pki')
     return random_search.predict(X_test) 
 
-def dense_network(X_train, y_train, X_test, preprocessor):
+def dense_network(X_train, y_train, X_test, preprocessor, args):
     X_train_nn, X_val_nn, y_train_nn, y_val_nn = train_test_split(X_train, y_train, test_size=0.1, random_state=42)
     X_train_nn = pd.DataFrame(X_train_nn, columns=X_train.columns)
 
@@ -165,5 +174,8 @@ def dense_network(X_train, y_train, X_test, preprocessor):
                                 callbacks=callbacks)
         
     best_model = random_search_tuner.get_best_models()[0]
+    if args.save_model:
+        best_model.save('parameters/dnn.h5')
+        
     y_pred = [1 if p > 0.5 else 0 for p in best_model.predict(X_test_nn)]
     return y_pred

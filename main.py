@@ -27,7 +27,6 @@ def log_results(y_test, **predictions):
 
 def parse_arguments(sys_argv): 
     parser = argparse.ArgumentParser() 
-    print('Parsing arguments...')
     parser.add_argument('--model',
                         help='Select the model to use',
                         choices=['all', 'LogLoss', 'DecTree', 'SVM', 'RF', 'DNN'],
@@ -45,11 +44,9 @@ def parse_arguments(sys_argv):
     return parser.parse_args(sys_argv)
 
 def main():
-    print('in main')
-    print(f'sklearn version:{sklearn.__version__}')
+    
     args = parse_arguments(sys.argv[1:])
 
-    print('Loading dataset...')
     dataset = pd.read_csv('Dataset/in-vehicle-coupon-recommendation.csv')
     training_dataset, labels = dataset.drop('Y', axis=1), dataset['Y']
     X_train, X_test, y_train, y_test = train_test_split(training_dataset, labels, test_size=0.2, random_state=42)
@@ -58,21 +55,21 @@ def main():
     predictions = dict()
     match args.model:
         case 'LogLoss':
-          predictions['LogLoss'] = logLoss(X_train, y_train, X_test, preprocessor)
+          predictions['LogLoss'] = logLoss(X_train, y_train, X_test, preprocessor, args)
         case 'SVM': 
-          predictions['SVM'] = svm(X_train, y_train, X_test, preprocessor)
+          predictions['SVM'] = svm(X_train, y_train, X_test, preprocessor, args)
         case 'RF':
-          predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor)
+          predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor, args)
         case 'DecTree':
-          predictions['DecTree'] = decisionTree(X_train, y_train, X_test, preprocessor)
+          predictions['DecTree'] = decisionTree(X_train, y_train, X_test, preprocessor, args)
         case 'DNN':
-          predictions['DNN'] = dense_network(X_train, y_train, X_test, preprocessor)
+          predictions['DNN'] = dense_network(X_train, y_train, X_test, preprocessor, args)
         case 'all':
-            predictions['LogLoss'] = logLoss(X_train, y_train, X_test, preprocessor)
-            predictions['SVM'] = svm(X_train, y_train, X_test, preprocessor)
-            predictions['DecTree'] = decisionTree(X_train, y_train, X_test, preprocessor)
-            predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor)
-            predictions['DNN'] = dense_network(X_train, y_train, X_test, preprocessor)
+            predictions['LogLoss'] = logLoss(X_train, y_train, X_test, preprocessor, args)
+            predictions['SVM'] = svm(X_train, y_train, X_test, preprocessor, args)
+            predictions['DecTree'] = decisionTree(X_train, y_train, X_test, preprocessor, args)
+            predictions['RF'] = randomForest(X_train, y_train, X_test, preprocessor, args)
+            predictions['DNN'] = dense_network(X_train, y_train, X_test, preprocessor, args)
         case _: 
           raise Exception(f'model:{args.model} not found')
     
