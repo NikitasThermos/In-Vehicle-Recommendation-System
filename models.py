@@ -17,6 +17,10 @@ from imblearn.pipeline import make_pipeline
 
 
 def logLoss(X_train, y_train, X_test, preprocessor, args):
+    if args.best_parameters: 
+        model = joblib.load('parameters/logloss.pki')
+        return model.predict(X_test)
+
     full_pipeline = make_pipeline(preprocessor,
                               SGDClassifier(loss='log_loss',
                                             learning_rate='adaptive', random_state=42))
@@ -42,6 +46,10 @@ def logLoss(X_train, y_train, X_test, preprocessor, args):
     return random_search.predict(X_test)
 
 def decisionTree(X_train, y_train, X_test, preprocessor, args):
+    if args.best_parameters: 
+        model = joblib.load('parameters/decisiontree.pki')
+        return model.predict(X_test)
+    
     full_pipeline = make_pipeline(preprocessor,
                               DecisionTreeClassifier(random_state=42))
 
@@ -68,6 +76,10 @@ def decisionTree(X_train, y_train, X_test, preprocessor, args):
     return random_search.predict(X_test)
 
 def randomForest(X_train, y_train, X_test, preprocessor, args):
+    if args.best_parameters: 
+        model = joblib.load('parameters/rf.pki')
+        return model.predict(X_test)
+    
     full_pipeline = make_pipeline(preprocessor,
                               RandomForestClassifier(random_state=42))
 
@@ -94,6 +106,10 @@ def randomForest(X_train, y_train, X_test, preprocessor, args):
     return random_search.predict(X_test)
 
 def svm(X_train, y_train, X_test, preprocessor, args):
+    if args.best_parameters: 
+        model = joblib.load('parameters/svm.pki')
+        return model.predict(X_test)
+    
     full_pipeline = make_pipeline(preprocessor,
                               SVC(kernel='rbf', gamma='scale', degree=2, random_state=42))
 
@@ -128,6 +144,11 @@ def dense_network(X_train, y_train, X_test, preprocessor, args):
     X_train_nn = scaler.fit_transform(X_train_nn)
     X_val_nn = scaler.transform(X_val_nn)
     X_test_nn = scaler.transform(X_test_nn)
+
+    if args.best_parameters: 
+        model = tf.keras.models.load_model('parameters/dnn.h5')
+        return [1 if p > 0.5 else 0 for p in model.predict(X_test)]
+
 
     y_train_nn = y_train_nn.values.reshape(-1, 1)
     y_val_nn = y_val_nn.values.reshape(-1, 1)
@@ -176,6 +197,6 @@ def dense_network(X_train, y_train, X_test, preprocessor, args):
     best_model = random_search_tuner.get_best_models()[0]
     if args.save_model:
         best_model.save('parameters/dnn.h5')
-        
+
     y_pred = [1 if p > 0.5 else 0 for p in best_model.predict(X_test_nn)]
     return y_pred
