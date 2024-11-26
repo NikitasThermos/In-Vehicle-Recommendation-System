@@ -31,10 +31,38 @@ Finally, for the DNN model we also standardized the features because DNNs are mo
 
 <a name="results"></a>
 ## Results
-For the comparison of the models we used Precision and Recall which are the most popular metrics for binary classification problems as well as a combination of those to create the F1 and ROC-AUC scores.  
+For the comparison of the models we used Precision and Recall which are the most popular metrics for binary classification problems as well as a combination of those to create the F1.
+
+| Mode | Recall | Precision | F1 |
+| --- | --- | --- | --- | 
+| Linear Logistic | 0.84 | 0.60 | 0.70
+| SVM | 0.81 | 0.65 | 0.72
+| Decision Tree | 0.78 | 0.70 | 0.74
+| Random Forest | 0.83 | 0.71 | 0.76
+| DNN | 0.87 | 0.69 | 0.77
 
 <a name="deployment"></a>
 ## Deployment
+The whole implementation of the preprocessing and the models can be found on the [Jupyter notebook](vehicle_recommendation.ipynb) that you can use to run the experiments on Google Colab. If you want to run locally you can clone the project with:
+```bash
+git clone https://github.com/NikitasThermos/In-Vehicle-Recommendation-System
+```
+To run the project we recommend to use a conda environment with all the necesary dependencies. You can follow the instructions [here](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) to install conda. Then you can create an environment using the [environment.yml](environment.yml) file:
+```bash
+conda env create -f environment.yml
+```
+Then activate the environemnt: 
+```bash
+conda activate my_env
+```
+and run the [main.py](main.py) file. With that file you can also use the following options:
+|Option | Description | Values | Default | 
+| --- | --- | --- | --- |
+--model | The model to get results | all, LogLoss, SVM, DecTree, RF, DNN | all
+--best_parameters | Skip training and use ready parameters | True/False | False
+--save_model | Save the parameters of the model after training | True/False | False
+
+You can find the parameters that are used in the 'best_parameters' option under the [parameters](parameters) folder. If you decide to save a model it will overwrite the parameters under that folder. 
 
 <a name="features"></a>
 ## Dataset Features
